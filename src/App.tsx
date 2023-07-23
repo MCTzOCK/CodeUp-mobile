@@ -34,6 +34,7 @@ import Login from "./pages/account/Login";
 import Register from "./pages/account/Register";
 import ToDoListViewer from "./pages/todo/ToDoListViewer";
 import ToDoTaskViewer from "./pages/todo/[id]/ToDoTaskViewer";
+import ProjectIdeas from "./pages/ideas/ProjectIdeas";
 
 setupIonicReact();
 
@@ -70,6 +71,9 @@ const App: React.FC = () => {
             </Route>
             <Route path="/page/todo/:id" exact={true}>
               <ToDoTaskViewer />
+            </Route>
+            <Route path="/page/ideas" exact={true}>
+              <ProjectIdeas />
             </Route>
           </IonRouterOutlet>
         </IonSplitPane>

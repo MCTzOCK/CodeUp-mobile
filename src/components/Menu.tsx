@@ -25,6 +25,8 @@ import {
   checkmarkSharp,
   checkbox,
   checkboxSharp,
+  bulb,
+  bulbSharp,
 } from "ionicons/icons";
 import "./Menu.css";
 import { useLoggedIn } from "../hooks/useLoggedIn";
@@ -43,6 +45,13 @@ const appPages: AppPage[] = [
     url: "/page/courses",
     iosIcon: videocamOutline,
     mdIcon: videocamSharp,
+    onlyLoggedIn: false,
+  },
+  {
+    title: "Ideen",
+    url: "/page/ideas",
+    iosIcon: bulb,
+    mdIcon: bulbSharp,
     onlyLoggedIn: false,
   },
   {
