@@ -77,7 +77,9 @@ export default function CourseViewer() {
                     </IonHeader>
                     {
                         !loading && !error && (
-                            <>
+                            <div key={"page"} style={{
+                                padding: 10
+                            }}>
                                 <img src={course.splashImage} />
                                 <IonText style={{
                                     "font-size": "1.2rem"
@@ -115,7 +117,7 @@ export default function CourseViewer() {
                                         )
                                     })
                                 }
-                            </>
+                            </div>
                         )
                     }
                 </IonContent>
