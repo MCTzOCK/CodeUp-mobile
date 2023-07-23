@@ -108,7 +108,7 @@ export default function Login() {
                     });
 
                     if (res2.status !== 200) {
-                      alert("Fehler beim Anmelden: Falscherr Code!");
+                      alert("Fehler beim Anmelden: Falscher Code!");
                       return;
                     }
 
