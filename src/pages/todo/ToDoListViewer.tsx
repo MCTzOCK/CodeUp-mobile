@@ -17,10 +17,13 @@ import {
   IonCardHeader,
   IonCardTitle,
   IonContent,
+  IonFab,
+  IonFabButton,
   IonHeader,
   IonIcon,
   IonMenuButton,
   IonPage,
+  IonRefresher,
   IonSearchbar,
   IonTitle,
   IonToolbar,
@@ -30,10 +33,13 @@ import { useLoggedIn } from "../../hooks/useLoggedIn";
 import { useEffect } from "react";
 import REST from "@codeupspace/rest";
 import {
+  add,
+  addSharp,
   create,
   createSharp,
   open,
   openSharp,
+  reload,
   trash,
   trashSharp,
 } from "ionicons/icons";
@@ -76,31 +82,6 @@ export default function ToDoListViewer() {
               <IonMenuButton />
             </IonButtons>
             <IonTitle>ToDo Listen</IonTitle>
-            <IonButtons slot={"end"}>
-              <IonButton
-                onClick={async () => {
-                  const name = prompt("Gib den Namen der neuen Liste ein:");
-
-                  if (name === null || name.length === 0) return;
-
-                  const res = await REST.ToDo.createList({
-                    token: localStorage.getItem("token") as string,
-                    name,
-                  });
-
-                  if (res.status !== 200) {
-                    alert(
-                      "Fehler beim Erstellen der Liste: " + res.payload.error,
-                    );
-                    return;
-                  }
-
-                  reloadLists();
-                }}
-              >
-                <IonIcon ios={create} md={createSharp} />
-              </IonButton>
-            </IonButtons>
           </IonToolbar>
         </IonHeader>
 
@@ -135,7 +116,7 @@ export default function ToDoListViewer() {
                     <IonCardContent>
                       <IonButton
                         expand={"block"}
-                        routerLink={"/page/todo/list/" + list.id}
+                        routerLink={"/page/todo/" + list._id}
                       >
                         <IonIcon slot={"start"} ios={open} md={openSharp} />
                         Öffnen
@@ -176,6 +157,32 @@ export default function ToDoListViewer() {
                 </>
               );
             })}
+
+          <IonFab slot="fixed" vertical="bottom" horizontal="end">
+            <IonFabButton
+              onClick={async () => {
+                const name = prompt("Gib den Namen der neuen Liste ein:");
+
+                if (name === null || name.length === 0) return;
+
+                const res = await REST.ToDo.createList({
+                  token: localStorage.getItem("token") as string,
+                  name,
+                });
+
+                if (res.status !== 200) {
+                  alert(
+                    "Fehler beim Erstellen der Liste: " + res.payload.error,
+                  );
+                  return;
+                }
+
+                reloadLists();
+              }}
+            >
+              <IonIcon ios={add} md={addSharp} />
+            </IonFabButton>
+          </IonFab>
         </IonContent>
       </IonPage>
     </>
