@@ -41,7 +41,7 @@ export default function CourseViewer() {
             setCourse(res.payload.course);
             setLoading(false);
         })
-    }, []);
+    }, [id]);
 
     const [query, setQuery] = useState<string>("");
 
