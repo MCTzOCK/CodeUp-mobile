@@ -23,6 +23,9 @@ import {
   IonHeader,
   IonIcon,
   IonItem,
+  IonItemOption,
+  IonItemOptions,
+  IonItemSliding,
   IonList,
   IonMenuButton,
   IonPage,
@@ -35,7 +38,14 @@ import { useLoggedIn } from "../../../hooks/useLoggedIn";
 import { useParams } from "react-router";
 import { useEffect, useState } from "react";
 import REST from "@codeupspace/rest";
-import { add, addSharp, create, createSharp } from "ionicons/icons";
+import {
+  add,
+  addSharp,
+  create,
+  createSharp,
+  trash,
+  trashSharp,
+} from "ionicons/icons";
 
 export default function ToDoTaskViewer() {
   const { loggedIn, userInfo, loaded } = useLoggedIn();
@@ -60,6 +70,7 @@ export default function ToDoTaskViewer() {
     }).then(async (res) => {
       if (res.status !== 200) {
         setError(true);
+        alert(res.payload.error);
         setLoading(false);
       } else {
         setLoading(false);
@@ -104,29 +115,52 @@ export default function ToDoTaskViewer() {
                       .map((t: any) => {
                         return (
                           <>
-                            <IonItem>
-                              <IonCheckbox
-                                labelPlacement={"end"}
-                                justify={"start"}
-                                onIonChange={async (e) => {
-                                  await REST.ToDo.updateItem({
-                                    token: localStorage.getItem(
-                                      "token",
-                                    ) as string,
-                                    listId: id,
-                                    taskUUID: t.uuid,
-                                    update: {
-                                      finished: true,
-                                    },
-                                  });
+                            <IonItemSliding>
+                              <IonItem>
+                                <IonCheckbox
+                                  labelPlacement={"end"}
+                                  justify={"start"}
+                                  onIonChange={async (e) => {
+                                    await REST.ToDo.updateItem({
+                                      token: localStorage.getItem(
+                                        "token",
+                                      ) as string,
+                                      listId: id,
+                                      taskUUID: t.uuid,
+                                      update: {
+                                        finished: true,
+                                      },
+                                    });
 
-                                  reloadList();
-                                }}
-                                checked={false}
-                              >
-                                {t.name}
-                              </IonCheckbox>
-                            </IonItem>
+                                    reloadList();
+                                  }}
+                                  checked={false}
+                                >
+                                  {t.name}
+                                </IonCheckbox>
+                              </IonItem>
+
+                              <IonItemOptions>
+                                <IonItemOption
+                                  color={"danger"}
+                                  onClick={async () => {
+                                    if (confirm("Wirklich löschen?")) {
+                                      await REST.ToDo.deleteTask({
+                                        token: localStorage.getItem(
+                                          "token",
+                                        ) as string,
+                                        listId: id,
+                                        taskUUID: t.uuid,
+                                      });
+                                      reloadList();
+                                    }
+                                  }}
+                                >
+                                  <IonIcon ios={trash} md={trashSharp} />
+                                  Löschen
+                                </IonItemOption>
+                              </IonItemOptions>
+                            </IonItemSliding>
                           </>
                         );
                       })}
@@ -144,32 +178,54 @@ export default function ToDoTaskViewer() {
                       .map((t: any) => {
                         return (
                           <>
-                            <IonItem>
-                              <IonCheckbox
-                                labelPlacement={"end"}
-                                justify={"start"}
-                                checked={true}
-                                style={{
-                                  "text-decoration": "line-through",
-                                }}
-                                onIonChange={async (e) => {
-                                  await REST.ToDo.updateItem({
-                                    token: localStorage.getItem(
-                                      "token",
-                                    ) as string,
-                                    listId: id,
-                                    taskUUID: t.uuid,
-                                    update: {
-                                      finished: false,
-                                    },
-                                  });
+                            <IonItemSliding>
+                              <IonItem>
+                                <IonCheckbox
+                                  labelPlacement={"end"}
+                                  justify={"start"}
+                                  checked={true}
+                                  style={{
+                                    "text-decoration": "line-through",
+                                  }}
+                                  onIonChange={async (e) => {
+                                    await REST.ToDo.updateItem({
+                                      token: localStorage.getItem(
+                                        "token",
+                                      ) as string,
+                                      listId: id,
+                                      taskUUID: t.uuid,
+                                      update: {
+                                        finished: false,
+                                      },
+                                    });
 
-                                  reloadList();
-                                }}
-                              >
-                                {t.name}
-                              </IonCheckbox>
-                            </IonItem>
+                                    reloadList();
+                                  }}
+                                >
+                                  {t.name}
+                                </IonCheckbox>
+                              </IonItem>
+                              <IonItemOptions>
+                                <IonItemOption
+                                  color={"danger"}
+                                  onClick={async () => {
+                                    if (confirm("Wirklich löschen?")) {
+                                      await REST.ToDo.deleteTask({
+                                        token: localStorage.getItem(
+                                          "token",
+                                        ) as string,
+                                        listId: id,
+                                        taskUUID: t.uuid,
+                                      });
+                                      reloadList();
+                                    }
+                                  }}
+                                >
+                                  <IonIcon ios={trash} md={trashSharp} />
+                                  Löschen
+                                </IonItemOption>
+                              </IonItemOptions>
+                            </IonItemSliding>
                           </>
                         );
                       })}
