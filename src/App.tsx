@@ -2,7 +2,9 @@ import { IonApp, IonRouterOutlet, IonSplitPane, setupIonicReact } from '@ionic/r
 import { IonReactRouter } from '@ionic/react-router';
 import { Redirect, Route } from 'react-router-dom';
 import Menu from './components/Menu';
-import Page from './pages/Page';
+import Home from './pages/Home';
+import Courses from './pages/courses/Courses';
+import CourseViewer from './pages/courses/[id]/CourseViewer';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -22,8 +24,12 @@ import '@ionic/react/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
+import SectionViewer from './pages/courses/[id]/[id]/SectionViewer';
 
 setupIonicReact();
+
+// @ts-ignore
+window.PREFIX_PATH = "https://codeup.space";
 
 const App: React.FC = () => {
   return (
@@ -33,10 +39,16 @@ const App: React.FC = () => {
           <Menu />
           <IonRouterOutlet id="main">
             <Route path="/" exact={true}>
-              <Redirect to="/folder/Inbox" />
+              <Home />
             </Route>
-            <Route path="/folder/:name" exact={true}>
-              <Page />
+            <Route path="/page/courses" exact={true}>
+              <Courses />
+            </Route>
+            <Route path="/page/courses/:id" exact={true}>
+              <CourseViewer />
+            </Route>
+            <Route path="/page/courses/:id/:sid" exact={true}>
+              <SectionViewer />
             </Route>
           </IonRouterOutlet>
         </IonSplitPane>
