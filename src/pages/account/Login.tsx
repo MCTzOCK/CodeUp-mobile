@@ -120,6 +120,13 @@ export default function Login() {
               >
                 Anmelden
               </IonButton>
+              <IonButton
+                expand={"block"}
+                fill={"clear"}
+                routerLink={"/page/account/register"}
+              >
+                Registrieren
+              </IonButton>
             </IonCardContent>
           </IonCard>
         </IonContent>

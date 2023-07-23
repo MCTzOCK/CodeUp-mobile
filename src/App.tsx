@@ -31,6 +31,7 @@ import "@ionic/react/css/display.css";
 import "./theme/variables.css";
 import SectionViewer from "./pages/courses/[id]/[id]/SectionViewer";
 import Login from "./pages/account/Login";
+import Register from "./pages/account/Register";
 
 setupIonicReact();
 
@@ -58,6 +59,9 @@ const App: React.FC = () => {
             </Route>
             <Route path="/page/account/login" exact={true}>
               <Login />
+            </Route>
+            <Route path="/page/account/register" exact={true}>
+              <Register />
             </Route>
           </IonRouterOutlet>
         </IonSplitPane>
