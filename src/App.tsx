@@ -32,6 +32,7 @@ import "./theme/variables.css";
 import SectionViewer from "./pages/courses/[id]/[id]/SectionViewer";
 import Login from "./pages/account/Login";
 import Register from "./pages/account/Register";
+import ToDoListViewer from "./pages/todo/ToDoListViewer";
 
 setupIonicReact();
 
@@ -62,6 +63,9 @@ const App: React.FC = () => {
             </Route>
             <Route path="/page/account/register" exact={true}>
               <Register />
+            </Route>
+            <Route path="/page/todo" exact={true}>
+              <ToDoListViewer />
             </Route>
           </IonRouterOutlet>
         </IonSplitPane>

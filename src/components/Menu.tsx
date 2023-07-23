@@ -21,6 +21,10 @@ import {
   personSharp,
   logOut,
   logOutSharp,
+  checkmark,
+  checkmarkSharp,
+  checkbox,
+  checkboxSharp,
 } from "ionicons/icons";
 import "./Menu.css";
 import { useLoggedIn } from "../hooks/useLoggedIn";
@@ -30,6 +34,7 @@ interface AppPage {
   iosIcon: string;
   mdIcon: string;
   title: string;
+  onlyLoggedIn: boolean;
 }
 
 const appPages: AppPage[] = [
@@ -38,6 +43,14 @@ const appPages: AppPage[] = [
     url: "/page/courses",
     iosIcon: videocamOutline,
     mdIcon: videocamSharp,
+    onlyLoggedIn: false,
+  },
+  {
+    title: "ToDo",
+    url: "/page/todo",
+    iosIcon: checkbox,
+    mdIcon: checkboxSharp,
+    onlyLoggedIn: true,
   },
 ];
 
@@ -102,6 +115,7 @@ const Menu: React.FC = () => {
             </>
           )}
           {appPages.map((appPage, index) => {
+            if (appPage.onlyLoggedIn && !loggedIn) return <></>;
             return (
               <IonMenuToggle key={index} autoHide={false}>
                 <IonItem
