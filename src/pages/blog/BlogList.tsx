@@ -105,7 +105,6 @@ export default function BlogList() {
                         {new Date(b.published_at).toLocaleString()}
                       </IonCardSubtitle>
                     </IonCardHeader>
-                    <IonCardContent></IonCardContent>
                   </IonCard>
                 </>
               );
