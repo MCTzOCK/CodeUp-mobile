@@ -97,7 +97,7 @@ const appPages: AppPage[] = [
     url: "/page/contact",
     iosIcon: helpCircle,
     mdIcon: helpCircleSharp,
-    onlyLoggedIn: false,
+    onlyLoggedIn: true,
   },
   {
     title: "Account",
