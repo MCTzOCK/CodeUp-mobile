@@ -11,9 +11,11 @@ import { useParams } from "react-router";
 import { useEffect, useState } from "react";
 import REST from "@codeupspace/rest/dist";
 import {
+  IonButton,
   IonButtons,
   IonContent,
   IonHeader,
+  IonIcon,
   IonMenuButton,
   IonPage,
   IonTitle,
@@ -21,6 +23,8 @@ import {
 } from "@ionic/react";
 import * as React from "react";
 import Markdown from "markdown-to-jsx";
+import { share, shareOutline, shareSharp } from "ionicons/icons";
+import { Share } from "@capacitor/share";
 
 export default function BlogViewer() {
   const { id } = useParams<{ id: string }>();
@@ -47,6 +51,19 @@ export default function BlogViewer() {
               <IonMenuButton />
             </IonButtons>
             <IonTitle>{blog ? blog.title : "Blog"}</IonTitle>
+            <IonButtons slot={"end"}>
+              <IonButton
+                onClick={async () => {
+                  await Share.share({
+                    title: blog.title + " - CodeUp Blog",
+                    url: "https://codeup.space/blog/" + id,
+                    dialogTitle: "Teilen",
+                  });
+                }}
+              >
+                <IonIcon ios={shareOutline} md={shareSharp}></IonIcon>
+              </IonButton>
+            </IonButtons>
           </IonToolbar>
         </IonHeader>
         <IonContent fullscreen>
