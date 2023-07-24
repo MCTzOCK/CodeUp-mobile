@@ -29,6 +29,10 @@ import {
   bulbSharp,
   star,
   starSharp,
+  cog,
+  cogSharp,
+  people,
+  peopleSharp,
 } from "ionicons/icons";
 import "./Menu.css";
 import { useLoggedIn } from "../hooks/useLoggedIn";
@@ -71,10 +75,17 @@ const appPages: AppPage[] = [
     onlyLoggedIn: true,
   },
   {
+    title: "Organisationen",
+    url: "/page/orgs",
+    iosIcon: people,
+    mdIcon: peopleSharp,
+    onlyLoggedIn: true,
+  },
+  {
     title: "Account",
     url: "/page/account/manage",
-    iosIcon: person,
-    mdIcon: personSharp,
+    iosIcon: cog,
+    mdIcon: cogSharp,
     onlyLoggedIn: true,
   },
 ];

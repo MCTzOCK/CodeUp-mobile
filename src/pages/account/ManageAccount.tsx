@@ -79,6 +79,13 @@ export default function ManageAccount() {
                     value={userInfo.lastName}
                     id={"acc-input-u-lastname"}
                   />
+                  <IonInput
+                    placeholder={"E-Mail"}
+                    label={"E-Mail"}
+                    labelPlacement={"floating"}
+                    value={userInfo.email}
+                    id={"acc-input-u-email"}
+                  />
                   <IonButton
                     expand={"block"}
                     onClick={async () => {
@@ -93,6 +100,11 @@ export default function ManageAccount() {
                         lastName: (
                           document.getElementById(
                             "acc-input-u-lastname",
+                          ) as HTMLIonInputElement
+                        ).value as string,
+                        email: (
+                          document.getElementById(
+                            "acc-input-u-email",
                           ) as HTMLIonInputElement
                         ).value as string,
                       };
@@ -110,10 +122,10 @@ export default function ManageAccount() {
                         });
 
                         if (res.status === 200) {
-                          alert("Gespeichert!");
                           localStorage.setItem("token", res.payload.newToken);
                         } else {
                           alert("Fehler beim Speichern: " + res.payload.error);
+                          return;
                         }
                       }
                     }}

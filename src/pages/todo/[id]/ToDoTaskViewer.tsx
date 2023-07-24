@@ -109,7 +109,11 @@ export default function ToDoTaskViewer() {
                   <IonCardTitle>Zu erledigen</IonCardTitle>
                 </IonCardHeader>
                 <IonCardContent>
-                  <IonList>
+                  <IonList
+                    style={{
+                      "border-radius": "12px",
+                    }}
+                  >
                     {list.tasks
                       .filter((t: any) => !t.finished)
                       .map((t: any) => {
@@ -172,7 +176,11 @@ export default function ToDoTaskViewer() {
                   <IonCardTitle>Erledigt</IonCardTitle>
                 </IonCardHeader>
                 <IonCardContent>
-                  <IonList>
+                  <IonList
+                    style={{
+                      "border-radius": "12px",
+                    }}
+                  >
                     {list.tasks
                       .filter((t: any) => t.finished)
                       .map((t: any) => {
