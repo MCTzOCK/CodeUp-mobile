@@ -39,6 +39,7 @@ import Discovery from "./pages/discovery/Discovery";
 import ManageAccount from "./pages/account/ManageAccount";
 import Orgs from "./pages/orgs/Orgs";
 import OrgViewer from "./pages/orgs/OrgViewer";
+import BlogList from "./pages/blog/BlogList";
 
 setupIonicReact();
 
@@ -90,6 +91,9 @@ const App: React.FC = () => {
             </Route>
             <Route path="/page/orgs/:name" exact={true}>
               <OrgViewer />
+            </Route>
+            <Route path="/page/blog" exact={true}>
+              <BlogList />
             </Route>
           </IonRouterOutlet>
         </IonSplitPane>
