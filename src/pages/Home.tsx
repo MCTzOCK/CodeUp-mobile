@@ -9,6 +9,7 @@ import {
   IonText,
   IonTitle,
   IonToolbar,
+  useIonRouter,
 } from "@ionic/react";
 import { useParams } from "react-router";
 

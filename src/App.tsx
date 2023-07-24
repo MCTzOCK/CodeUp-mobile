@@ -43,6 +43,7 @@ import BlogList from "./pages/blog/BlogList";
 import BlogViewer from "./pages/blog/BlogViewer";
 import Contact from "./pages/contact/Contact";
 import Flows from "./pages/flows/Flows";
+import FlowViewer from "./pages/flows/[id]/FowViewer";
 
 setupIonicReact();
 
@@ -106,6 +107,9 @@ const App: React.FC = () => {
             </Route>
             <Route path="/page/flows" exact={true}>
               <Flows />
+            </Route>
+            <Route path="/page/flows/:id" exact={true}>
+              <FlowViewer />
             </Route>
           </IonRouterOutlet>
         </IonSplitPane>
