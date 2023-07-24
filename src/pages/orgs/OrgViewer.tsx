@@ -23,6 +23,7 @@ import {
   IonPage,
   IonRefresher,
   IonRefresherContent,
+  IonSearchbar,
   IonSegment,
   IonSegmentButton,
   IonText,
@@ -53,6 +54,7 @@ export default function OrgViewer() {
 
   const [currentBlog, setCurrentBlog] = useState<any>();
   const [courses, setCourses] = useState<any[]>([]);
+  const [query, setQuery] = useState<string>("");
 
   useEffect(() => {
     if (loaded && !loggedIn) {
@@ -141,6 +143,7 @@ export default function OrgViewer() {
           <IonSegment
             value={segment}
             onIonChange={(ev) => {
+              setQuery("");
               setSegment(ev.detail.value as string);
             }}
           >
@@ -161,16 +164,31 @@ export default function OrgViewer() {
           >
             <IonRefresherContent></IonRefresherContent>
           </IonRefresher>
+
+          <IonSearchbar
+            value={query}
+            onIonInput={(ev) => {
+              let st = "";
+              const target = ev.target as HTMLIonSearchbarElement;
+              if (target) st = target.value!.toLowerCase();
+
+              setQuery(st);
+            }}
+          />
           {segment === "news" && (
             <>
               {news &&
                 news
-                  // reverse
                   .sort((a, b) => {
                     return (
                       new Date(b.createdAt).getTime() -
                       new Date(a.createdAt).getTime()
                     );
+                  })
+                  .filter((blog) => {
+                    if (query === "") return true;
+                    if (blog.title.toLowerCase().includes(query)) return true;
+                    return false;
                   })
                   .map((blog) => {
                     return (
@@ -195,19 +213,27 @@ export default function OrgViewer() {
           )}
           {segment === "courses" && (
             <>
-              {courses.map((course) => {
-                return (
-                  <>
-                    <IonCard routerLink={"/page/courses/" + course._id}>
-                      <img alt={course.name} src={course.splashImage} />
-                      <IonCardHeader>
-                        <IonCardTitle>{course.name}</IonCardTitle>
-                      </IonCardHeader>
-                      <IonCardContent>{course.description}</IonCardContent>
-                    </IonCard>
-                  </>
-                );
-              })}
+              {courses
+                .filter((course) => {
+                  if (query === "") return true;
+                  if (course.name.toLowerCase().includes(query)) return true;
+                  if (course.description.toLowerCase().includes(query))
+                    return true;
+                  return false;
+                })
+                .map((course) => {
+                  return (
+                    <>
+                      <IonCard routerLink={"/page/courses/" + course._id}>
+                        <img alt={course.name} src={course.splashImage} />
+                        <IonCardHeader>
+                          <IonCardTitle>{course.name}</IonCardTitle>
+                        </IonCardHeader>
+                        <IonCardContent>{course.description}</IonCardContent>
+                      </IonCard>
+                    </>
+                  );
+                })}
             </>
           )}
           {currentBlog && (
