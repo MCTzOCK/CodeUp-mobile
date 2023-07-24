@@ -16,7 +16,6 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import "./Courses.css";
 import { useEffect, useState } from "react";
 import REST from "@codeupspace/rest";
 

@@ -38,6 +38,7 @@ import ProjectIdeas from "./pages/ideas/ProjectIdeas";
 import Discovery from "./pages/discovery/Discovery";
 import ManageAccount from "./pages/account/ManageAccount";
 import Orgs from "./pages/orgs/Orgs";
+import OrgViewer from "./pages/orgs/OrgViewer";
 
 setupIonicReact();
 
@@ -86,6 +87,9 @@ const App: React.FC = () => {
             </Route>
             <Route path="/page/orgs" exact={true}>
               <Orgs />
+            </Route>
+            <Route path="/page/orgs/:name" exact={true}>
+              <OrgViewer />
             </Route>
           </IonRouterOutlet>
         </IonSplitPane>
