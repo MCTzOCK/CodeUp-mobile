@@ -70,6 +70,13 @@ const appPages: AppPage[] = [
     mdIcon: checkboxSharp,
     onlyLoggedIn: true,
   },
+  {
+    title: "Account",
+    url: "/page/account/manage",
+    iosIcon: person,
+    mdIcon: personSharp,
+    onlyLoggedIn: true,
+  },
 ];
 
 const Menu: React.FC = () => {

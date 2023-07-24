@@ -36,6 +36,7 @@ import ToDoListViewer from "./pages/todo/ToDoListViewer";
 import ToDoTaskViewer from "./pages/todo/[id]/ToDoTaskViewer";
 import ProjectIdeas from "./pages/ideas/ProjectIdeas";
 import Discovery from "./pages/discovery/Discovery";
+import ManageAccount from "./pages/account/ManageAccount";
 
 setupIonicReact();
 
@@ -66,6 +67,9 @@ const App: React.FC = () => {
             </Route>
             <Route path="/page/account/register" exact={true}>
               <Register />
+            </Route>
+            <Route path="/page/account/manage" exact={true}>
+              <ManageAccount />
             </Route>
             <Route path="/page/todo" exact={true}>
               <ToDoListViewer />

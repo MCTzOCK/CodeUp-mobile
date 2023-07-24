@@ -24,6 +24,7 @@ import {
   IonMenuButton,
   IonPage,
   IonRefresher,
+  IonRefresherContent,
   IonSearchbar,
   IonTitle,
   IonToolbar,

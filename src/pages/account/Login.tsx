@@ -97,7 +97,7 @@ export default function Login() {
                     const token = res.payload.token;
                     localStorage.setItem("token", token);
 
-                    router.push("/");
+                    router.push("/", "none", "replace");
                   } else {
                     const code = prompt("Bitte den 2FA Code eingeben:");
 
