@@ -27,6 +27,8 @@ import {
   checkboxSharp,
   bulb,
   bulbSharp,
+  star,
+  starSharp,
 } from "ionicons/icons";
 import "./Menu.css";
 import { useLoggedIn } from "../hooks/useLoggedIn";
@@ -52,6 +54,13 @@ const appPages: AppPage[] = [
     url: "/page/ideas",
     iosIcon: bulb,
     mdIcon: bulbSharp,
+    onlyLoggedIn: false,
+  },
+  {
+    title: "Discovery",
+    url: "/page/discovery",
+    iosIcon: star,
+    mdIcon: starSharp,
     onlyLoggedIn: false,
   },
   {
