@@ -35,6 +35,8 @@ import {
   peopleSharp,
   document,
   documentSharp,
+  helpCircle,
+  helpCircleSharp,
 } from "ionicons/icons";
 import "./Menu.css";
 import { useLoggedIn } from "../hooks/useLoggedIn";
@@ -88,6 +90,13 @@ const appPages: AppPage[] = [
     url: "/page/blog",
     iosIcon: document,
     mdIcon: documentSharp,
+    onlyLoggedIn: false,
+  },
+  {
+    title: "Kontakt",
+    url: "/page/contact",
+    iosIcon: helpCircle,
+    mdIcon: helpCircleSharp,
     onlyLoggedIn: false,
   },
   {
