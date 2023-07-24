@@ -72,13 +72,14 @@ export default function OrgViewer() {
 
         setOrg(res.payload.org);
         setLoading(false);
+        reloadSegment();
       });
     }
   }, [loaded, loggedIn]);
 
   useEffect(() => {
     reloadSegment();
-  }, [segment]);
+  }, [segment, org]);
 
   const reloadSegment = async () => {
     if (segment === "news") {

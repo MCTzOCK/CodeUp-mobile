@@ -17,6 +17,8 @@ import {
   IonHeader,
   IonMenuButton,
   IonPage,
+  IonRefresher,
+  IonRefresherContent,
   IonSearchbar,
   IonText,
   IonTitle,
@@ -27,6 +29,7 @@ import * as React from "react";
 import { useLoggedIn } from "../../hooks/useLoggedIn";
 import { useEffect, useState } from "react";
 import REST from "@codeupspace/rest/dist";
+import { reload } from "ionicons/icons";
 
 export default function Orgs() {
   const { loggedIn, userInfo, loaded } = useLoggedIn();
@@ -39,18 +42,22 @@ export default function Orgs() {
     if (loaded && !loggedIn) {
       router.push("/account/login", "none", "replace");
     } else if (loggedIn && loaded) {
-      REST.Orgs.getOrgs(localStorage.getItem("token") as string).then(
-        async (res) => {
-          if (res.status !== 200) {
-            alert("Organisationen konnten nicht geladen werden!");
-            return;
-          }
-
-          setOrgs(res.payload.orgs);
-        },
-      );
+      reloadOrgs();
     }
   }, [loaded, loggedIn]);
+
+  const reloadOrgs = async () => {
+    const res = await REST.Orgs.getOrgs(
+      localStorage.getItem("token") as string,
+    );
+    if (res.status !== 200) {
+      alert("Organisationen konnten nicht geladen werden!");
+      return;
+    }
+
+    setOrgs(res.payload.orgs);
+  };
+
   return (
     <>
       <IonPage>
@@ -69,6 +76,16 @@ export default function Orgs() {
               <IonTitle size="large">Organisationen</IonTitle>
             </IonToolbar>
           </IonHeader>
+
+          <IonRefresher
+            slot="fixed"
+            onIonRefresh={async (ev) => {
+              await reloadOrgs();
+              ev.detail.complete();
+            }}
+          >
+            <IonRefresherContent></IonRefresherContent>
+          </IonRefresher>
           <IonSearchbar
             onIonInput={(ev) => {
               let st = "";

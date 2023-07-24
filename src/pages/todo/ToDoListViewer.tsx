@@ -61,17 +61,16 @@ export default function ToDoListViewer() {
     }
   }, [loggedIn, loaded]);
 
-  const reloadLists = () => {
-    REST.ToDo.getMyLists(localStorage.getItem("token") as string).then(
-      async (res) => {
-        if (res.status !== 200) {
-          alert("Fehler beim Laden der ToDo Listen: " + res.payload.error);
-          return;
-        }
-
-        setLists(res.payload.lists);
-      },
+  const reloadLists = async () => {
+    const res = await REST.ToDo.getMyLists(
+      localStorage.getItem("token") as string,
     );
+    if (res.status !== 200) {
+      alert("Fehler beim Laden der ToDo Listen: " + res.payload.error);
+      return;
+    }
+
+    setLists(res.payload.lists);
   };
 
   return (
@@ -92,6 +91,15 @@ export default function ToDoListViewer() {
               <IonTitle size="large">ToDo Listen</IonTitle>
             </IonToolbar>
           </IonHeader>
+          <IonRefresher
+            slot="fixed"
+            onIonRefresh={async (ev) => {
+              await reloadLists();
+              ev.detail.complete();
+            }}
+          >
+            <IonRefresherContent></IonRefresherContent>
+          </IonRefresher>
           <IonSearchbar
             onIonInput={(ev) => {
               let st = "";

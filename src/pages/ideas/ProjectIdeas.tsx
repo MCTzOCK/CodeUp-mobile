@@ -21,6 +21,8 @@ import {
   IonHeader,
   IonMenuButton,
   IonPage,
+  IonRefresher,
+  IonRefresherContent,
   IonSearchbar,
   IonTitle,
   IonToolbar,
@@ -31,10 +33,18 @@ export default function ProjectIdeas() {
   const [query, setQuery] = React.useState<string>("");
 
   useEffect(() => {
-    REST.Ideas.getProjectIdeas().then((r) => {
-      setIdeas(r.payload.ideas);
-    });
+    reloadIdeas();
   }, []);
+
+  const reloadIdeas = async () => {
+    const res = await REST.Ideas.getProjectIdeas();
+    if (res.status !== 200) {
+      alert("Projektideen konnten nicht geladen werden!");
+      return;
+    }
+
+    setIdeas(res.payload.ideas);
+  };
 
   return (
     <>
@@ -54,6 +64,15 @@ export default function ProjectIdeas() {
               <IonTitle size="large">Projektideen</IonTitle>
             </IonToolbar>
           </IonHeader>
+          <IonRefresher
+            slot="fixed"
+            onIonRefresh={async (ev) => {
+              await reloadIdeas();
+              ev.detail.complete();
+            }}
+          >
+            <IonRefresherContent></IonRefresherContent>
+          </IonRefresher>
           <IonSearchbar
             onIonInput={(ev) => {
               let st = "";
