@@ -1,10 +1,10 @@
 /**
- * src/pages/flows/Flows.tsx
+ * src/pages/snippets/CodeSnippets.tsx
  *
  * Author: Ben Siebert <hello@ben-siebert.de>
  * Copyright: Copyright (c) 2018-2023 Ben Siebert. All rights reserved.
  * License: Project License
- * Created At: 24.07.23
+ * Created At: 25.07.23
  *
  */
 import {
@@ -13,6 +13,7 @@ import {
   IonCard,
   IonCardContent,
   IonCardHeader,
+  IonCardSubtitle,
   IonCardTitle,
   IonContent,
   IonFab,
@@ -28,9 +29,9 @@ import {
   IonToolbar,
   useIonRouter,
 } from "@ionic/react";
+import * as React from "react";
 import { useEffect, useState } from "react";
 import { useLoggedIn } from "../../hooks/useLoggedIn";
-import * as React from "react";
 import REST from "@codeupspace/rest/dist";
 import {
   add,
@@ -41,34 +42,34 @@ import {
   trashSharp,
 } from "ionicons/icons";
 
-export default function Flows() {
-  const [flows, setFlows] = useState<any[]>([]);
-  const router = useIonRouter();
-  const { loggedIn, loaded, userInfo } = useLoggedIn();
-
+export default function CodeSnippets() {
   const [query, setQuery] = useState<string>("");
+  const { loggedIn, userInfo, loaded } = useLoggedIn();
+  const router = useIonRouter();
+  const [snippets, setSnippets] = useState<any[]>([]);
 
   useEffect(() => {
     if (loaded) {
       if (!loggedIn) {
-        router.push("/page/account/login", "none", "replace");
+        router.push("/account/login", "none", "replace");
         return;
       }
-      reloadFlows();
-    }
-  }, [loggedIn, loaded]);
 
-  const reloadFlows = async () => {
-    const res = await REST.ToDo.getV2Projects(
+      reloadSnippets();
+    }
+  }, [loaded, loggedIn]);
+
+  const reloadSnippets = async () => {
+    const res = await REST.Snippets.getSnippets(
       localStorage.getItem("token") as string,
     );
 
     if (res.status !== 200) {
-      alert("Fehler beim Laden der Flows: " + res.payload.error);
+      alert("Fehler beim Laden der Snippets: " + res.payload.error);
       return;
     }
 
-    setFlows(res.payload.projects);
+    setSnippets(res.payload.snippets);
   };
 
   return (
@@ -79,20 +80,20 @@ export default function Flows() {
             <IonButtons slot="start">
               <IonMenuButton />
             </IonButtons>
-            <IonTitle>Flows</IonTitle>
+            <IonTitle>Code Snippets</IonTitle>
           </IonToolbar>
         </IonHeader>
 
         <IonContent fullscreen>
           <IonHeader collapse="condense">
             <IonToolbar>
-              <IonTitle size="large">Flows</IonTitle>
+              <IonTitle size="large">Code Snippets</IonTitle>
             </IonToolbar>
           </IonHeader>
           <IonRefresher
             slot="fixed"
             onIonRefresh={async (ev) => {
-              await reloadFlows();
+              await reloadSnippets();
               ev.detail.complete();
             }}
           >
@@ -107,24 +108,30 @@ export default function Flows() {
               setQuery(st);
             }}
           />
-          {flows
-            .filter((f) => {
+          {snippets
+            .filter((s) => {
               if (query === "") return true;
-              return f.name.toLowerCase().includes(query);
+              if (s.title.toLowerCase().includes(query)) return true;
+              return false;
             })
-            .map((f) => {
+            .map((sn) => {
               return (
                 <>
                   <IonCard>
                     <IonCardHeader>
-                      <IonCardTitle>{f.name}</IonCardTitle>
+                      <IonCardTitle>{sn.title}</IonCardTitle>
+                      <IonCardSubtitle>
+                        {new Date(sn.createdAt).toLocaleString()}
+                        &nbsp;&#8226;&nbsp;
+                        {sn.language}
+                      </IonCardSubtitle>
                     </IonCardHeader>
                     <IonCardContent>
                       <IonButton
                         expand={"block"}
-                        routerLink={"/page/flows/" + f._id}
+                        routerLink={"/page/snippets/" + sn._id}
                       >
-                        <IonIcon slot={"start"} ios={open} md={openSharp} />
+                        <IonIcon ios={open} md={openSharp} slot={"start"} />
                         Öffnen
                       </IonButton>
                       <IonButton
@@ -132,27 +139,27 @@ export default function Flows() {
                         color={"danger"}
                         onClick={async () => {
                           if (
-                            !confirm("Willst du diesen Flow wirklich löschen?")
+                            !confirm("Willst du das Snippet wirklich löschen?")
                           )
                             return;
 
-                          const res = await REST.ToDo.deleteV2Project({
+                          const res = await REST.Snippets.deleteSnippet({
                             token: localStorage.getItem("token") as string,
-                            id: f._id,
+                            id: sn._id,
                           });
 
                           if (res.status !== 200) {
                             alert(
-                              "Fehler beim Löschen des Flows: " +
+                              "Fehler beim Löschen des Snippets: " +
                                 res.payload.error,
                             );
                             return;
                           }
 
-                          await reloadFlows();
+                          await reloadSnippets();
                         }}
                       >
-                        <IonIcon slot={"start"} ios={trash} md={trashSharp} />
+                        <IonIcon ios={trash} md={trashSharp} slot={"start"} />
                         Löschen
                       </IonButton>
                     </IonCardContent>
@@ -163,22 +170,26 @@ export default function Flows() {
           <IonFab vertical="bottom" horizontal="end" slot="fixed">
             <IonFabButton
               onClick={async () => {
-                const name = prompt("Wie soll der Flow heißen?");
-                if (!name) return;
+                const name = prompt("Wie soll das Snippet heißen?");
+                const lang = prompt("Welche Sprache soll das Snippet haben?");
 
-                const res = await REST.ToDo.createV2Project({
-                  name: name as string,
+                if (!name || !lang) return;
+
+                const res = await REST.Snippets.createSnippet({
+                  code: "Hallo Welt!",
+                  language: lang as string,
+                  title: name as string,
                   token: localStorage.getItem("token") as string,
                 });
 
                 if (res.status !== 200) {
                   alert(
-                    "Fehler beim Erstellen des Flows: " + res.payload.error,
+                    "Fehler beim Erstellen des Snippets: " + res.payload.error,
                   );
                   return;
                 }
 
-                await reloadFlows();
+                await reloadSnippets();
               }}
             >
               <IonIcon ios={add} md={addSharp} />

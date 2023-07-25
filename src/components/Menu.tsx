@@ -39,7 +39,7 @@ import {
   helpCircle,
   helpCircleSharp,
   trendingUp,
-  trendingUpSharp,
+  trendingUpSharp, code, codeSharp,
 } from "ionicons/icons";
 import "./Menu.css";
 import { useLoggedIn } from "../hooks/useLoggedIn";
@@ -86,6 +86,13 @@ const appPages: AppPage[] = [
     url: "/page/flows",
     iosIcon: trendingUp,
     mdIcon: trendingUpSharp,
+    onlyLoggedIn: true,
+  },
+  {
+    title: "Code Snippets",
+    url: "/page/snippets",
+    iosIcon: code,
+    mdIcon: codeSharp,
     onlyLoggedIn: true,
   },
   {
