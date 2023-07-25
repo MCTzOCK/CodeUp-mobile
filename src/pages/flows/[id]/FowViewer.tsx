@@ -15,6 +15,8 @@ import {
   IonIcon,
   IonMenuButton,
   IonPage,
+  IonSelect,
+  IonSelectOption,
   IonTitle,
   IonToolbar,
   useIonRouter,
@@ -40,7 +42,22 @@ import ReactFlow, {
 import { useParams } from "react-router";
 import "reactflow/dist/style.css";
 import REST from "@codeupspace/rest/dist";
-import { add, addSharp } from "ionicons/icons";
+import {
+  add,
+  addSharp,
+  colorFill,
+  colorFillSharp,
+  colorWand,
+  colorWandSharp,
+  sparkles,
+  sparklesSharp,
+  swapHorizontal,
+  swapHorizontalSharp,
+  text,
+  textSharp,
+  trash,
+  trashSharp,
+} from "ionicons/icons";
 
 export default function FlowViewer() {
   const { id } = useParams<{ id: string }>();
@@ -176,6 +193,166 @@ export default function FlowViewer() {
               >
                 <IonIcon ios={add} md={addSharp} />
               </IonButton>
+              {currentNode && (
+                <>
+                  <IonButton
+                    onClick={() => {
+                      setNodes((nodes) =>
+                        nodes.filter((n) => n.id !== currentNode.id),
+                      );
+                      setEdges((edges) =>
+                        edges.filter(
+                          (e) =>
+                            e.source !== currentNode.id &&
+                            e.target !== currentNode.id,
+                        ),
+                      );
+                      setCurrentNode(null);
+                    }}
+                  >
+                    <IonIcon ios={trash} md={trashSharp} />
+                  </IonButton>
+                  <IonButton
+                    onClick={() => {
+                      (
+                        document.querySelector(
+                          "#flows-i-color",
+                        ) as HTMLIonSelectElement
+                      ).click();
+                    }}
+                  >
+                    <IonIcon ios={colorFill} md={colorFillSharp} />
+                  </IonButton>
+                  <IonButton
+                    onClick={() => {
+                      const text = prompt(
+                        "Text",
+                        currentNode?.data.label ?? "",
+                      );
+                      if (text) {
+                        setNodes((nodes) =>
+                          nodes.map((n) =>
+                            n.id === currentNode.id
+                              ? {
+                                  ...n,
+                                  data: {
+                                    ...n.data,
+                                    label: text,
+                                  },
+                                }
+                              : n,
+                          ),
+                        );
+                        setCurrentNode(null);
+                      }
+                    }}
+                  >
+                    <IonIcon ios={text} md={textSharp} />
+                  </IonButton>
+                  <IonSelect
+                    id={"flows-i-color"}
+                    style={{
+                      display: "none",
+                    }}
+                    onIonChange={(e) => {
+                      setNodes((nodes) =>
+                        nodes.map((n) =>
+                          n.id === currentNode.id
+                            ? {
+                                ...n,
+                                style: {
+                                  ...n.style,
+                                  background: e.detail.value,
+                                },
+                              }
+                            : n,
+                        ),
+                      );
+                      setCurrentNode(null);
+                    }}
+                  >
+                    <IonSelectOption value="#4422AA">Blau</IonSelectOption>
+                    <IonSelectOption value="#44AA22">Grün</IonSelectOption>
+                    <IonSelectOption value="#AA4422">Rot</IonSelectOption>
+                    <IonSelectOption value="#000000">Schwarz</IonSelectOption>
+                  </IonSelect>
+                </>
+              )}
+              {currentEdge && (
+                <>
+                  <IonButton
+                    onClick={() => {
+                      setEdges((edges) =>
+                        edges.filter((e) => e.id !== currentEdge.id),
+                      );
+                      setCurrentEdge(null);
+                    }}
+                  >
+                    <IonIcon ios={trash} md={trashSharp} />
+                  </IonButton>
+                  <IonButton
+                    onClick={() => {
+                      setEdges((edges) =>
+                        edges.map((e) =>
+                          e.id === currentEdge.id
+                            ? {
+                                ...e,
+                                animated: !e.animated,
+                              }
+                            : e,
+                        ),
+                      );
+                      setCurrentEdge(null);
+                    }}
+                  >
+                    <IonIcon ios={sparkles} md={sparklesSharp} />
+                  </IonButton>
+                  <IonButton
+                    onClick={() => {
+                      setEdges((edges) =>
+                        edges.map((e) =>
+                          e.id === currentEdge.id
+                            ? {
+                                ...e,
+                                type:
+                                  e.type === "default"
+                                    ? "smoothstep"
+                                    : "default",
+                              }
+                            : e,
+                        ),
+                      );
+                      setCurrentEdge(null);
+                    }}
+                  >
+                    <IonIcon ios={swapHorizontal} md={swapHorizontalSharp} />
+                  </IonButton>
+
+                  <IonButton
+                    onClick={() => {
+                      const text = prompt(
+                        "Text",
+                        (currentEdge?.label as string) ?? "",
+                      );
+                      if (text !== null) {
+                        setEdges((edges) =>
+                          edges.map((n) =>
+                            n.id === currentEdge.id
+                              ? {
+                                  ...n,
+                                  label: text,
+                                }
+                              : n,
+                          ),
+                        );
+                        setCurrentEdge(null);
+                      }
+                    }}
+                  >
+                    <IonIcon ios={text} md={textSharp} />
+                  </IonButton>
+                </>
+              )}
             </IonButtons>
           </IonToolbar>
         </IonHeader>
@@ -200,26 +377,12 @@ export default function FlowViewer() {
             snapGrid={[10, 10]}
             onInit={setRfInstance}
             onEdgeClick={(e, edge) => {
-              const text = prompt("Text eingeben", edge.label as string);
-
-              if (text !== null) {
-                setEdges((edges) =>
-                  edges.map((n) =>
-                    n.id === edge.id ? { ...n, label: text } : n,
-                  ),
-                );
-              }
+              setCurrentEdge(edge);
+              setCurrentNode(null);
             }}
             onNodeClick={(e, node) => {
-              const text = prompt("Text eingeben", node.data.label);
-
-              if (text) {
-                setNodes((nodes) =>
-                  nodes.map((n) =>
-                    n.id === node.id ? { ...n, data: { label: text } } : n,
-                  ),
-                );
-              }
+              setCurrentNode(node);
+              setCurrentEdge(null);
             }}
           >
             <Background />
