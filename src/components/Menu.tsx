@@ -39,7 +39,9 @@ import {
   helpCircle,
   helpCircleSharp,
   trendingUp,
-  trendingUpSharp, code, codeSharp,
+  trendingUpSharp,
+  code,
+  codeSharp,
 } from "ionicons/icons";
 import "./Menu.css";
 import { useLoggedIn } from "../hooks/useLoggedIn";
@@ -115,6 +117,13 @@ const appPages: AppPage[] = [
     iosIcon: helpCircle,
     mdIcon: helpCircleSharp,
     onlyLoggedIn: true,
+  },
+  {
+    title: "Einstellungen",
+    url: "/page/settings",
+    iosIcon: cog,
+    mdIcon: cogSharp,
+    onlyLoggedIn: false,
   },
   {
     title: "Account",

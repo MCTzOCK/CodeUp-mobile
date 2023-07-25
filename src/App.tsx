@@ -46,6 +46,7 @@ import Flows from "./pages/flows/Flows";
 import FlowViewer from "./pages/flows/[id]/FlowViewer";
 import CodeSnippets from "./pages/snippets/CodeSnippets";
 import SnippetViewer from "./pages/snippets/[id]/SnippetViewer";
+import Settings from "./pages/Settings";
 
 setupIonicReact();
 
@@ -118,6 +119,9 @@ const App: React.FC = () => {
             </Route>
             <Route path="/page/snippets/:id" exact={true}>
               <SnippetViewer />
+            </Route>
+            <Route path="/page/settings" exact={true}>
+              <Settings />
             </Route>
           </IonRouterOutlet>
         </IonSplitPane>

@@ -22,12 +22,17 @@ import { useEffect, useState } from "react";
 import REST from "@codeupspace/rest";
 import { useParams } from "react-router";
 import * as React from "react";
-import { Editor } from "@monaco-editor/react";
+import Editor from "react-simple-code-editor";
+import "prismjs/themes/prism-dark.min.css";
+import Prism from "prismjs";
+import { Drivers, Storage } from "@ionic/storage";
 
 export default function SnippetViewer() {
   const { loggedIn, userInfo, loaded } = useLoggedIn();
   const router = useIonRouter();
   const [snippet, setSnippet] = useState<any>();
+
+  const [fontSize, setFontSize] = useState<number>(14);
 
   const { id } = useParams<{ id: string }>();
 
@@ -55,6 +60,27 @@ export default function SnippetViewer() {
       });
     }
   }, [snippet]);
+
+  useEffect(() => {
+    (async () => {
+      const store = new Storage({
+        name: "codeupspace_settings",
+        driverOrder: [
+          Drivers.IndexedDB,
+          Drivers.SecureStorage,
+          Drivers.LocalStorage,
+        ],
+      });
+      await store.create();
+
+      const fs = await store.get("editor.fontSize");
+      if (fs) {
+        setFontSize(fs);
+      } else {
+        await store.set("editor.fontSize", fontSize);
+      }
+    })();
+  });
 
   const reloadSnippet = async () => {
     if (!id) return;
@@ -95,14 +121,19 @@ export default function SnippetViewer() {
           {snippet ? (
             <>
               <Editor
-                height={"100vh"}
-                language={snippet?.language || "javascript"}
-                theme={"vs-dark"}
                 value={snippet?.code}
-                options={{
-                  fontSize: 20,
+                highlight={(code) =>
+                  Prism.highlight(
+                    code,
+                    Prism.languages[snippet.language],
+                    snippet.language,
+                  )
+                }
+                padding={30}
+                style={{
+                  fontSize: fontSize,
                 }}
-                onChange={(value) => {
+                onValueChange={(value) => {
                   if (snippet) {
                     setSnippet({
                       ...snippet,
