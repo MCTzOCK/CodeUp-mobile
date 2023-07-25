@@ -43,7 +43,7 @@ import BlogList from "./pages/blog/BlogList";
 import BlogViewer from "./pages/blog/BlogViewer";
 import Contact from "./pages/contact/Contact";
 import Flows from "./pages/flows/Flows";
-import FlowViewer from "./pages/flows/[id]/FowViewer";
+import FlowViewer from "./pages/flows/[id]/FlowViewer";
 
 setupIonicReact();
 
