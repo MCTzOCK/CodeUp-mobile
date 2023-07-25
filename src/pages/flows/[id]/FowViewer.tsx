@@ -183,7 +183,7 @@ export default function FlowViewer() {
                         y: randomNumber(0, 400),
                       },
                       style: {
-                        background: "#4422FF",
+                        background: "#4422AA",
                         color: "white",
                       },
                       deletable: false,
