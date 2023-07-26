@@ -253,7 +253,10 @@ export default function ToDoTaskViewer() {
                     });
 
                     if (res.status !== 200) {
-                      alert("Fehler beim Erstellen der Aufgabe");
+                      alert(
+                        "Fehler beim Erstellen der Aufgabe: " +
+                          res.payload.error,
+                      );
                     } else {
                       reloadList();
                     }

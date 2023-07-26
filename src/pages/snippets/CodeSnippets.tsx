@@ -51,7 +51,7 @@ export default function CodeSnippets() {
   useEffect(() => {
     if (loaded) {
       if (!loggedIn) {
-        router.push("/account/login", "none", "replace");
+        router.push("/page/account/login", "none", "replace");
         return;
       }
 
