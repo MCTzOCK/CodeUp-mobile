@@ -9,6 +9,7 @@
  */
 import { useLoggedIn } from "../../../hooks/useLoggedIn";
 import {
+  IonBackButton,
   IonButtons,
   IonContent,
   IonHeader,
@@ -23,8 +24,8 @@ import REST from "@codeupspace/rest";
 import { useParams } from "react-router";
 import * as React from "react";
 import Editor from "react-simple-code-editor";
-import "prismjs/themes/prism-dark.min.css";
 import Prism from "prismjs";
+import "prismjs/themes/prism-tomorrow.min.css";
 import { Drivers, Storage } from "@ionic/storage";
 
 export default function SnippetViewer() {
@@ -105,6 +106,7 @@ export default function SnippetViewer() {
           <IonToolbar>
             <IonButtons slot="start">
               <IonMenuButton />
+              <IonBackButton />
             </IonButtons>
             <IonTitle>{snippet ? snippet.title : "Laden..."}</IonTitle>
           </IonToolbar>

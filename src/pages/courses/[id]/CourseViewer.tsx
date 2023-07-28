@@ -1,5 +1,6 @@
 import REST from "@codeupspace/rest";
 import {
+  IonBackButton,
   IonButton,
   IonButtons,
   IonCard,
@@ -19,6 +20,7 @@ import {
 } from "@ionic/react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
+import * as React from "react";
 
 export default function CourseViewer() {
   const { id } = useParams<{ id: string }>();
@@ -67,6 +69,7 @@ export default function CourseViewer() {
           <IonToolbar>
             <IonButtons slot="start">
               <IonMenuButton />
+              <IonBackButton />
             </IonButtons>
             <IonTitle>
               {loading ? "Laden..." : error ? "Fehler" : course.name}

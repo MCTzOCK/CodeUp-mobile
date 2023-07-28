@@ -1,5 +1,6 @@
 import REST from "@codeupspace/rest";
 import {
+  IonBackButton,
   IonButton,
   IonButtons,
   IonCard,
@@ -19,6 +20,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import Plyr from "plyr-react";
 import "plyr-react/plyr.css";
+import * as React from "react";
 
 export default function SectionViewer() {
   const { id, sid } = useParams<{ id: string; sid: string }>();
@@ -62,6 +64,7 @@ export default function SectionViewer() {
           <IonToolbar>
             <IonButtons slot="start">
               <IonMenuButton />
+              <IonBackButton />
             </IonButtons>
             <IonTitle>
               {loading ? "Laden..." : error ? "Fehler" : section.displayName}

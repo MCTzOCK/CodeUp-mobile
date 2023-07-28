@@ -8,6 +8,7 @@
  *
  */
 import {
+  IonBackButton,
   IonButton,
   IonButtons,
   IonCard,
@@ -38,6 +39,7 @@ import { useEffect, useRef, useState } from "react";
 import REST from "@codeupspace/rest";
 import { useParams } from "react-router";
 import { add, addSharp } from "ionicons/icons";
+import { IonBackButtonInner } from "@ionic/react/dist/types/components/inner-proxies";
 
 export default function OrgViewer() {
   const { loggedIn, userInfo, loaded } = useLoggedIn();
@@ -127,6 +129,7 @@ export default function OrgViewer() {
           <IonToolbar>
             <IonButtons slot="start">
               <IonMenuButton />
+              <IonBackButton />
             </IonButtons>
             <IonTitle>
               {loading ? "Laden..." : error ? "Fehler" : org.name}

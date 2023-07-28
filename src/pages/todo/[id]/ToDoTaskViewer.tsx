@@ -10,6 +10,7 @@
 
 import * as React from "react";
 import {
+  IonBackButton,
   IonButton,
   IonButtons,
   IonCard,
@@ -86,6 +87,7 @@ export default function ToDoTaskViewer() {
           <IonToolbar>
             <IonButtons slot="start">
               <IonMenuButton />
+              <IonBackButton />
             </IonButtons>
             <IonTitle>
               {loading ? "Laden..." : error ? "Fehler" : list.name}

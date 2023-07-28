@@ -2,6 +2,7 @@ import {
   IonApp,
   IonRouterOutlet,
   IonSplitPane,
+  IonTitle,
   setupIonicReact,
 } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
@@ -48,75 +49,97 @@ import CodeSnippets from "./pages/snippets/CodeSnippets";
 import SnippetViewer from "./pages/snippets/[id]/SnippetViewer";
 import Settings from "./pages/Settings";
 
+import { Network } from "@capacitor/network";
+import { useEffect, useState } from "react";
+
 setupIonicReact();
 
 // @ts-ignore
 window.PREFIX_PATH = "https://codeup.space";
 
 const App: React.FC = () => {
+  const [offline, setOffline] = useState<boolean>(false);
+
+  useEffect(() => {
+    Network.getStatus().then((s) => {
+      setOffline(!s.connected);
+    });
+
+    Network.addListener("networkStatusChange", (status) => {
+      setOffline(!status.connected);
+    });
+  }, []);
   return (
     <IonApp>
       <IonReactRouter>
         <IonSplitPane contentId="main">
           <Menu />
           <IonRouterOutlet id="main">
-            <Route path="/" exact={true}>
-              <Home />
-            </Route>
-            <Route path="/page/courses" exact={true}>
-              <Courses />
-            </Route>
-            <Route path="/page/courses/:id" exact={true}>
-              <CourseViewer />
-            </Route>
-            <Route path="/page/courses/:id/:sid" exact={true}>
-              <SectionViewer />
-            </Route>
-            <Route path="/page/account/login" exact={true}>
-              <Login />
-            </Route>
-            <Route path="/page/account/register" exact={true}>
-              <Register />
-            </Route>
-            <Route path="/page/todo" exact={true}>
-              <ToDoListViewer />
-            </Route>
-            <Route path="/page/todo/:id" exact={true}>
-              <ToDoTaskViewer />
-            </Route>
-            <Route path="/page/ideas" exact={true}>
-              <ProjectIdeas />
-            </Route>
-            <Route path="/page/discovery" exact={true}>
-              <Discovery />
-            </Route>
-            <Route path="/page/orgs" exact={true}>
-              <Orgs />
-            </Route>
-            <Route path="/page/orgs/:name" exact={true}>
-              <OrgViewer />
-            </Route>
-            <Route path="/page/blog" exact={true}>
-              <BlogList />
-            </Route>
-            <Route path="/page/blog/:id" exact={true}>
-              <BlogViewer />
-            </Route>
-            <Route path="/page/flows" exact={true}>
-              <Flows />
-            </Route>
-            <Route path="/page/flows/:id" exact={true}>
-              <FlowViewer />
-            </Route>
-            <Route path="/page/snippets" exact={true}>
-              <CodeSnippets />
-            </Route>
-            <Route path="/page/snippets/:id" exact={true}>
-              <SnippetViewer />
-            </Route>
-            <Route path="/page/settings" exact={true}>
-              <Settings />
-            </Route>
+            {offline ? (
+              <>
+                <IonTitle>Bitte verbinde dich mit dem Internet!</IonTitle>
+              </>
+            ) : (
+              <>
+                <Route path="/" exact={true}>
+                  <Home />
+                </Route>
+                <Route path="/page/courses" exact={true}>
+                  <Courses />
+                </Route>
+                <Route path="/page/courses/:id" exact={true}>
+                  <CourseViewer />
+                </Route>
+                <Route path="/page/courses/:id/:sid" exact={true}>
+                  <SectionViewer />
+                </Route>
+                <Route path="/page/account/login" exact={true}>
+                  <Login />
+                </Route>
+                <Route path="/page/account/register" exact={true}>
+                  <Register />
+                </Route>
+                <Route path="/page/todo" exact={true}>
+                  <ToDoListViewer />
+                </Route>
+                <Route path="/page/todo/:id" exact={true}>
+                  <ToDoTaskViewer />
+                </Route>
+                <Route path="/page/ideas" exact={true}>
+                  <ProjectIdeas />
+                </Route>
+                <Route path="/page/discovery" exact={true}>
+                  <Discovery />
+                </Route>
+                <Route path="/page/orgs" exact={true}>
+                  <Orgs />
+                </Route>
+                <Route path="/page/orgs/:name" exact={true}>
+                  <OrgViewer />
+                </Route>
+                <Route path="/page/blog" exact={true}>
+                  <BlogList />
+                </Route>
+                <Route path="/page/blog/:id" exact={true}>
+                  <BlogViewer />
+                </Route>
+                <Route path="/page/flows" exact={true}>
+                  <Flows />
+                </Route>
+                <Route path="/page/flows/:id" exact={true}>
+                  <FlowViewer />
+                </Route>
+                <Route path="/page/snippets" exact={true}>
+                  <CodeSnippets />
+                </Route>
+                <Route path="/page/snippets/:id" exact={true}>
+                  <SnippetViewer />
+                </Route>
+                <Route path="/page/settings" exact={true}>
+                  <Settings />
+                </Route>
+              </>
+            )}
           </IonRouterOutlet>
         </IonSplitPane>
       </IonReactRouter>

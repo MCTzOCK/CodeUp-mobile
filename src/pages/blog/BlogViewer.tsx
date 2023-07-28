@@ -11,6 +11,7 @@ import { useParams } from "react-router";
 import { useEffect, useState } from "react";
 import REST from "@codeupspace/rest/dist";
 import {
+  IonBackButton,
   IonButton,
   IonButtons,
   IonContent,
@@ -49,6 +50,7 @@ export default function BlogViewer() {
           <IonToolbar>
             <IonButtons slot="start">
               <IonMenuButton />
+              <IonBackButton />
             </IonButtons>
             <IonTitle>{blog ? blog.title : "Blog"}</IonTitle>
             <IonButtons slot={"end"}>

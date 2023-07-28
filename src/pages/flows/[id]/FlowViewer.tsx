@@ -8,9 +8,12 @@
  *
  */
 import {
+  IonBackButton,
   IonButton,
   IonButtons,
-  IonContent, IonFab, IonFabButton,
+  IonContent,
+  IonFab,
+  IonFabButton,
   IonHeader,
   IonIcon,
   IonMenuButton,
@@ -164,33 +167,33 @@ export default function FlowViewer() {
           <IonToolbar>
             <IonButtons slot="start">
               <IonMenuButton />
+              <IonBackButton />
             </IonButtons>
             <IonTitle>Flow</IonTitle>
             <IonButtons slot={"end"}>
-
               <IonButton
-                  onClick={() => {
-                    const randomNumber = (min: number, max: number) => {
-                      return Math.floor(Math.random() * (max - min + 1)) + min;
-                    };
+                onClick={() => {
+                  const randomNumber = (min: number, max: number) => {
+                    return Math.floor(Math.random() * (max - min + 1)) + min;
+                  };
 
-                    setNodes((nodes) => [
-                      ...nodes,
-                      {
-                        id: `${nodes.length + 1}`,
-                        data: { label: "Neuer Knoten" },
-                        position: {
-                          x: randomNumber(0, 400),
-                          y: randomNumber(0, 400),
-                        },
-                        style: {
-                          background: "#4422AA",
-                          color: "white",
-                        },
-                        deletable: false,
+                  setNodes((nodes) => [
+                    ...nodes,
+                    {
+                      id: `${nodes.length + 1}`,
+                      data: { label: "Neuer Knoten" },
+                      position: {
+                        x: randomNumber(0, 400),
+                        y: randomNumber(0, 400),
                       },
-                    ]);
-                  }}
+                      style: {
+                        background: "#4422AA",
+                        color: "white",
+                      },
+                      deletable: false,
+                    },
+                  ]);
+                }}
               >
                 <IonIcon ios={add} md={addSharp} />
               </IonButton>
@@ -231,192 +234,187 @@ export default function FlowViewer() {
           </ReactFlow>
           <IonFab slot={"fixed"} vertical={"bottom"} horizontal={"end"}>
             {currentNode ? (
-                <>
-                  <IonFabButton
-                      style={{
-                        marginBottom: "40px"
-                      }}
-                      onClick={() => {
-                        if(!currentNode) return;
-                        setNodes((nodes) =>
-                            nodes.filter((n) => n.id !== currentNode.id),
-                        );
-                        setEdges((edges) =>
-                            edges.filter(
-                                (e) =>
-                                    e.source !== currentNode.id! &&
-                                    e.target !== currentNode.id!,
-                            ),
-                        );
-                        setCurrentNode(null);
-                      }}
-                  >
-                    <IonIcon ios={trash} md={trashSharp} />
-                  </IonFabButton>
-                  <IonFabButton
-                      style={{
-                        marginBottom: "40px"
-                      }}
-                      onClick={() => {
-                        (
-                            document.querySelector(
-                                "#flows-i-color",
-                            ) as HTMLIonSelectElement
-                        ).click();
-                      }}
-                  >
-                    <IonIcon ios={colorFill} md={colorFillSharp} />
-                  </IonFabButton>
-                  <IonFabButton
-                      style={{
-                        marginBottom: "40px",
-                      }}
-                      onClick={() => {
-                        if(!currentNode) return;
-                        const text = prompt(
-                            "Text",
-                            currentNode?.data.label ?? "",
-                        );
-                        if (text) {
-                          setNodes((nodes) =>
-                              nodes.map((n) =>
-                                  n.id === currentNode.id!
-                                      ? {
-                                        ...n,
-                                        data: {
-                                          ...n.data,
-                                          label: text,
-                                        },
-                                      }
-                                      : n,
-                              ),
-                          );
-                          setCurrentNode(null);
-                        }
-                      }}
-                  >
-                    <IonIcon ios={text} md={textSharp} />
-                  </IonFabButton>
-                  <IonSelect
-                      id={"flows-i-color"}
-                      style={{
-                        display: "none",
-                      }}
-                      onIonChange={(e) => {
-                        if(!currentNode) return;
-                        setNodes((nodes) =>
-                            nodes.map((n) =>
-                                n.id === currentNode.id!
-                                    ? {
-                                      ...n,
-                                      style: {
-                                        ...n.style,
-                                        background: e.detail.value,
-                                      },
-                                    }
-                                    : n,
-                            ),
-                        );
-                        setCurrentNode(null);
-                      }}
-                  >
-                    <IonSelectOption value="#4422AA">Blau</IonSelectOption>
-                    <IonSelectOption value="#44AA22">Grün</IonSelectOption>
-                    <IonSelectOption value="#AA4422">Rot</IonSelectOption>
-                    <IonSelectOption value="#000000">Schwarz</IonSelectOption>
-                  </IonSelect>
-                </>
+              <>
+                <IonFabButton
+                  style={{
+                    marginBottom: "40px",
+                  }}
+                  onClick={() => {
+                    if (!currentNode) return;
+                    setNodes((nodes) =>
+                      nodes.filter((n) => n.id !== currentNode.id),
+                    );
+                    setEdges((edges) =>
+                      edges.filter(
+                        (e) =>
+                          e.source !== currentNode.id! &&
+                          e.target !== currentNode.id!,
+                      ),
+                    );
+                    setCurrentNode(null);
+                  }}
+                >
+                  <IonIcon ios={trash} md={trashSharp} />
+                </IonFabButton>
+                <IonFabButton
+                  style={{
+                    marginBottom: "40px",
+                  }}
+                  onClick={() => {
+                    (
+                      document.querySelector(
+                        "#flows-i-color",
+                      ) as HTMLIonSelectElement
+                    ).click();
+                  }}
+                >
+                  <IonIcon ios={colorFill} md={colorFillSharp} />
+                </IonFabButton>
+                <IonFabButton
+                  style={{
+                    marginBottom: "40px",
+                  }}
+                  onClick={() => {
+                    if (!currentNode) return;
+                    const text = prompt("Text", currentNode?.data.label ?? "");
+                    if (text) {
+                      setNodes((nodes) =>
+                        nodes.map((n) =>
+                          n.id === currentNode.id!
+                            ? {
+                                ...n,
+                                data: {
+                                  ...n.data,
+                                  label: text,
+                                },
+                              }
+                            : n,
+                        ),
+                      );
+                      setCurrentNode(null);
+                    }
+                  }}
+                >
+                  <IonIcon ios={text} md={textSharp} />
+                </IonFabButton>
+                <IonSelect
+                  id={"flows-i-color"}
+                  style={{
+                    display: "none",
+                  }}
+                  onIonChange={(e) => {
+                    if (!currentNode) return;
+                    setNodes((nodes) =>
+                      nodes.map((n) =>
+                        n.id === currentNode.id!
+                          ? {
+                              ...n,
+                              style: {
+                                ...n.style,
+                                background: e.detail.value,
+                              },
+                            }
+                          : n,
+                      ),
+                    );
+                    setCurrentNode(null);
+                  }}
+                >
+                  <IonSelectOption value="#4422AA">Blau</IonSelectOption>
+                  <IonSelectOption value="#44AA22">Grün</IonSelectOption>
+                  <IonSelectOption value="#AA4422">Rot</IonSelectOption>
+                  <IonSelectOption value="#000000">Schwarz</IonSelectOption>
+                </IonSelect>
+              </>
             ) : null}
 
             {currentEdge && (
-                <>
-                  <IonFabButton
-                      style={{
-                        marginBottom: "40px"
-                      }}
-                      onClick={() => {
-                        if(!currentEdge) return;
-                        setEdges((edges) =>
-                            edges.filter((e) => e.id !== currentEdge.id),
-                        );
-                        setCurrentEdge(null);
-                      }}
-                  >
-                    <IonIcon ios={trash} md={trashSharp} />
-                  </IonFabButton>
-                  <IonFabButton
-                      style={{
-                        marginBottom: "40px"
-                      }}
-                      onClick={() => {
-                        if(!currentEdge) return;
-                        setEdges((edges) =>
-                            edges.map((e) =>
-                                e.id === currentEdge.id
-                                    ? {
-                                      ...e,
-                                      animated: !e.animated,
-                                    }
-                                    : e,
-                            ),
-                        );
-                        setCurrentEdge(null);
-                      }}
-                  >
-                    <IonIcon ios={sparkles} md={sparklesSharp} />
-                  </IonFabButton>
-                  <IonFabButton
-                      style={{
-                        marginBottom: "40px"
-                      }}
-                      onClick={() => {
-                        if(!currentEdge) return;
-                        setEdges((edges) =>
-                            edges.map((e) =>
-                                e.id === currentEdge.id
-                                    ? {
-                                      ...e,
-                                      type:
-                                          e.type === "default"
-                                              ? "smoothstep"
-                                              : "default",
-                                    }
-                                    : e,
-                            ),
-                        );
-                        setCurrentEdge(null);
-                      }}
-                  >
-                    <IonIcon ios={swapHorizontal} md={swapHorizontalSharp} />
-                  </IonFabButton>
-                  <IonFabButton
-                      style={{
-                        marginBottom: "40px"
-                      }}
-                      onClick={() => {
-                        if(!currentEdge) return;
-                        const text = prompt(
-                            "Text",
-                            (currentEdge?.label as string) ?? "",
-                        );
-                        if (text !== null) {
-                          setEdges((edges) =>
-                              edges.map((n) =>
-                                  n.id === currentEdge.id
-                                      ? {
-                                        ...n,
-                                        label: text,
-                                      }
-                                      : n,
-                              ),
-                          );
-                          setCurrentEdge(null);
-                        }
-                      }}
-                  >
-                    <IonIcon ios={text} md={textSharp} />
-                  </IonFabButton>
-                </>
+              <>
+                <IonFabButton
+                  style={{
+                    marginBottom: "40px",
+                  }}
+                  onClick={() => {
+                    if (!currentEdge) return;
+                    setEdges((edges) =>
+                      edges.filter((e) => e.id !== currentEdge.id),
+                    );
+                    setCurrentEdge(null);
+                  }}
+                >
+                  <IonIcon ios={trash} md={trashSharp} />
+                </IonFabButton>
+                <IonFabButton
+                  style={{
+                    marginBottom: "40px",
+                  }}
+                  onClick={() => {
+                    if (!currentEdge) return;
+                    setEdges((edges) =>
+                      edges.map((e) =>
+                        e.id === currentEdge.id
+                          ? {
+                              ...e,
+                              animated: !e.animated,
+                            }
+                          : e,
+                      ),
+                    );
+                    setCurrentEdge(null);
+                  }}
+                >
+                  <IonIcon ios={sparkles} md={sparklesSharp} />
+                </IonFabButton>
+                <IonFabButton
+                  style={{
+                    marginBottom: "40px",
+                  }}
+                  onClick={() => {
+                    if (!currentEdge) return;
+                    setEdges((edges) =>
+                      edges.map((e) =>
+                        e.id === currentEdge.id
+                          ? {
+                              ...e,
+                              type:
+                                e.type === "default" ? "smoothstep" : "default",
+                            }
+                          : e,
+                      ),
+                    );
+                    setCurrentEdge(null);
+                  }}
+                >
+                  <IonIcon ios={swapHorizontal} md={swapHorizontalSharp} />
+                </IonFabButton>
+                <IonFabButton
+                  style={{
+                    marginBottom: "40px",
+                  }}
+                  onClick={() => {
+                    if (!currentEdge) return;
+                    const text = prompt(
+                      "Text",
+                      (currentEdge?.label as string) ?? "",
+                    );
+                    if (text !== null) {
+                      setEdges((edges) =>
+                        edges.map((n) =>
+                          n.id === currentEdge.id
+                            ? {
+                                ...n,
+                                label: text,
+                              }
+                            : n,
+                        ),
+                      );
+                      setCurrentEdge(null);
+                    }
+                  }}
+                >
+                  <IonIcon ios={text} md={textSharp} />
+                </IonFabButton>
+              </>
             )}
           </IonFab>
         </IonContent>
