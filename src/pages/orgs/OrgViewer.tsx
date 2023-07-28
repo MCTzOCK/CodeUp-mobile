@@ -17,6 +17,7 @@ import {
   IonCardTitle,
   IonContent,
   IonHeader,
+  IonIcon,
   IonLabel,
   IonMenuButton,
   IonModal,
@@ -36,6 +37,7 @@ import { useLoggedIn } from "../../hooks/useLoggedIn";
 import { useEffect, useRef, useState } from "react";
 import REST from "@codeupspace/rest";
 import { useParams } from "react-router";
+import { add, addSharp } from "ionicons/icons";
 
 export default function OrgViewer() {
   const { loggedIn, userInfo, loaded } = useLoggedIn();
@@ -129,6 +131,42 @@ export default function OrgViewer() {
             <IonTitle>
               {loading ? "Laden..." : error ? "Fehler" : org.name}
             </IonTitle>
+            {userInfo.id === org.owner && segment === "news" && (
+              <>
+                <IonButtons slot={"end"}>
+                  <IonButton
+                    onClick={async () => {
+                      const title = prompt(
+                        "Gib den Titel für die Mitteilung ein!",
+                      );
+                      if (!title) return;
+
+                      const content = prompt(
+                        "Gib den Inhalt für die Mitteilung ein!",
+                        "",
+                      );
+                      if (!content) return;
+
+                      const res = await REST.Orgs.createBlog({
+                        token: localStorage.getItem("token") as string,
+                        org: org.name,
+                        title,
+                        content,
+                      });
+
+                      if (res.status !== 200) {
+                        alert("Fehler: " + res.payload.error);
+                        return;
+                      }
+
+                      await reloadSegment();
+                    }}
+                  >
+                    <IonIcon ios={add} md={addSharp} />
+                  </IonButton>
+                </IonButtons>
+              </>
+            )}
           </IonToolbar>
         </IonHeader>
 
