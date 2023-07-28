@@ -191,9 +191,29 @@ export default function Orgs() {
                           <IonButton
                             expand={"block"}
                             color={"primary"}
-                            routerLink={"/page/orgs/" + org.name + "/settings"}
+                            onClick={async () => {
+                              const name = prompt("Neuer Name", org.name);
+
+                              if (!name) return;
+
+                              const res = await REST.Orgs.renameOrg({
+                                token: localStorage.getItem("token") as string,
+                                newName: name,
+                                oldName: org.name,
+                              });
+
+                              if (res.status !== 200) {
+                                alert(
+                                  "Organisation konnte nicht umbenannt werden: " +
+                                    res.payload.error,
+                                );
+                                return;
+                              }
+
+                              await reloadOrgs();
+                            }}
                           >
-                            Einstellungen
+                            Umbenennen
                           </IonButton>
                           <IonButton
                             expand={"block"}

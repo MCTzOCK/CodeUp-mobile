@@ -47,7 +47,6 @@ import FlowViewer from "./pages/flows/[id]/FlowViewer";
 import CodeSnippets from "./pages/snippets/CodeSnippets";
 import SnippetViewer from "./pages/snippets/[id]/SnippetViewer";
 import Settings from "./pages/Settings";
-import OrgAdmin from "./pages/orgs/OrgAdmin";
 
 setupIonicReact();
 
@@ -96,9 +95,6 @@ const App: React.FC = () => {
             </Route>
             <Route path="/page/orgs/:name" exact={true}>
               <OrgViewer />
-            </Route>
-            <Route path="/page/orgs/:name/settings" exact={true}>
-              <OrgAdmin />
             </Route>
             <Route path="/page/blog" exact={true}>
               <BlogList />
