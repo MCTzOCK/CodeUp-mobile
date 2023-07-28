@@ -7,9 +7,6 @@ import {
 import { IonReactRouter } from "@ionic/react-router";
 import { Redirect, Route } from "react-router-dom";
 import Menu from "./components/Menu";
-import Home from "./pages/Home";
-import Courses from "./pages/courses/Courses";
-import CourseViewer from "./pages/courses/[id]/CourseViewer";
 
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/react/css/core.css";
@@ -29,6 +26,11 @@ import "@ionic/react/css/display.css";
 
 /* Theme variables */
 import "./theme/variables.css";
+
+/* Pages */
+import Home from "./pages/Home";
+import Courses from "./pages/courses/Courses";
+import CourseViewer from "./pages/courses/[id]/CourseViewer";
 import SectionViewer from "./pages/courses/[id]/[id]/SectionViewer";
 import Login from "./pages/account/Login";
 import Register from "./pages/account/Register";
@@ -36,12 +38,10 @@ import ToDoListViewer from "./pages/todo/ToDoListViewer";
 import ToDoTaskViewer from "./pages/todo/[id]/ToDoTaskViewer";
 import ProjectIdeas from "./pages/ideas/ProjectIdeas";
 import Discovery from "./pages/discovery/Discovery";
-import ManageAccount from "./pages/account/ManageAccount";
 import Orgs from "./pages/orgs/Orgs";
 import OrgViewer from "./pages/orgs/OrgViewer";
 import BlogList from "./pages/blog/BlogList";
 import BlogViewer from "./pages/blog/BlogViewer";
-import Contact from "./pages/contact/Contact";
 import Flows from "./pages/flows/Flows";
 import FlowViewer from "./pages/flows/[id]/FlowViewer";
 import CodeSnippets from "./pages/snippets/CodeSnippets";
@@ -78,9 +78,6 @@ const App: React.FC = () => {
             <Route path="/page/account/register" exact={true}>
               <Register />
             </Route>
-            <Route path="/page/account/manage" exact={true}>
-              <ManageAccount />
-            </Route>
             <Route path="/page/todo" exact={true}>
               <ToDoListViewer />
             </Route>
@@ -104,9 +101,6 @@ const App: React.FC = () => {
             </Route>
             <Route path="/page/blog/:id" exact={true}>
               <BlogViewer />
-            </Route>
-            <Route path="/page/contact" exact={true}>
-              <Contact />
             </Route>
             <Route path="/page/flows" exact={true}>
               <Flows />

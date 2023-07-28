@@ -112,22 +112,8 @@ const appPages: AppPage[] = [
     onlyLoggedIn: false,
   },
   {
-    title: "Kontakt",
-    url: "/page/contact",
-    iosIcon: helpCircle,
-    mdIcon: helpCircleSharp,
-    onlyLoggedIn: true,
-  },
-  {
     title: "Einstellungen",
     url: "/page/settings",
-    iosIcon: cog,
-    mdIcon: cogSharp,
-    onlyLoggedIn: false,
-  },
-  {
-    title: "Account",
-    url: "/page/account/manage",
     iosIcon: cog,
     mdIcon: cogSharp,
     onlyLoggedIn: true,
@@ -174,23 +160,6 @@ const Menu: React.FC = () => {
                 <IonText>
                   Willkommen, {userInfo.firstName} {userInfo.lastName}!
                 </IonText>
-              </IonItem>
-              <IonItem
-                lines="none"
-                detail={false}
-                onClick={() => {
-                  if (confirm("Willst du dich wirklich abmelden?")) {
-                    localStorage.removeItem("token");
-                  }
-                }}
-              >
-                <IonIcon
-                  aria-hidden="true"
-                  slot="start"
-                  ios={logOut}
-                  md={logOutSharp}
-                />
-                <IonLabel>Abmelden</IonLabel>
               </IonItem>
             </>
           )}
