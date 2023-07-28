@@ -75,7 +75,7 @@ export default function OrgViewer() {
         reloadSegment();
       });
     }
-  }, [loaded, loggedIn]);
+  }, [loaded, loggedIn, name]);
 
   useEffect(() => {
     reloadSegment();
@@ -141,21 +141,26 @@ export default function OrgViewer() {
             </IonToolbar>
           </IonHeader>
 
-          <IonSegment
-            value={segment}
-            onIonChange={(ev) => {
-              setQuery("");
-              setSegment(ev.detail.value as string);
+          <div
+            style={{
+              marginInline: "10px",
             }}
           >
-            <IonSegmentButton value="news">
-              <IonLabel>Mitteilungen</IonLabel>
-            </IonSegmentButton>
-            <IonSegmentButton value="courses">
-              <IonLabel>Kurse</IonLabel>
-            </IonSegmentButton>
-          </IonSegment>
-
+            <IonSegment
+              value={segment}
+              onIonChange={(ev) => {
+                setQuery("");
+                setSegment(ev.detail.value as string);
+              }}
+            >
+              <IonSegmentButton value="news">
+                <IonLabel>Mitteilungen</IonLabel>
+              </IonSegmentButton>
+              <IonSegmentButton value="courses">
+                <IonLabel>Kurse</IonLabel>
+              </IonSegmentButton>
+            </IonSegment>
+          </div>
           <IonRefresher
             slot="fixed"
             onIonRefresh={async (ev) => {

@@ -8,18 +8,24 @@
  *
  */
 import {
+  IonButton,
   IonButtons,
   IonCard,
   IonCardContent,
   IonCardHeader,
   IonCardTitle,
   IonContent,
+  IonFab,
+  IonFabButton,
   IonHeader,
+  IonIcon,
   IonMenuButton,
   IonPage,
   IonRefresher,
   IonRefresherContent,
   IonSearchbar,
+  IonSegment,
+  IonSegmentButton,
   IonText,
   IonTitle,
   IonToolbar,
@@ -29,7 +35,7 @@ import * as React from "react";
 import { useLoggedIn } from "../../hooks/useLoggedIn";
 import { useEffect, useState } from "react";
 import REST from "@codeupspace/rest/dist";
-import { reload } from "ionicons/icons";
+import { add, addSharp, reload } from "ionicons/icons";
 
 export default function Orgs() {
   const { loggedIn, userInfo, loaded } = useLoggedIn();
@@ -37,6 +43,7 @@ export default function Orgs() {
 
   const [orgs, setOrgs] = useState<any[]>([]);
   const [query, setQuery] = useState<string>("");
+  const [segment, setSegment] = useState<string>("all");
 
   useEffect(() => {
     if (loaded && !loggedIn) {
@@ -77,6 +84,22 @@ export default function Orgs() {
             </IonToolbar>
           </IonHeader>
 
+          <div
+            style={{
+              marginInline: "10px",
+            }}
+          >
+            <IonSegment
+              value={segment}
+              onIonChange={(ev) => {
+                setQuery("");
+                setSegment(ev.detail.value as string);
+              }}
+            >
+              <IonSegmentButton value={"all"}>Alle</IonSegmentButton>
+              <IonSegmentButton value={"admin"}>Admin</IonSegmentButton>
+            </IonSegment>
+          </div>
           <IonRefresher
             slot="fixed"
             onIonRefresh={async (ev) => {
@@ -101,10 +124,18 @@ export default function Orgs() {
               if (org.name.toLowerCase().includes(query)) return true;
               return false;
             })
+            .filter((org) => {
+              if (segment === "all") return true;
+              if (segment === "admin") {
+                if (org.owner === userInfo.id) return true;
+                return false;
+              }
+              return true;
+            })
             .map((org) => {
               return (
                 <>
-                  <IonCard routerLink={"/page/orgs/" + org.name}>
+                  <IonCard>
                     <IonCardHeader>
                       <IonCardTitle>{org.name}</IonCardTitle>
                     </IonCardHeader>
@@ -116,11 +147,114 @@ export default function Orgs() {
                       <IonText>
                         Erstellt am {new Date(org.createdAt).toLocaleString()}
                       </IonText>
+                      <IonButton
+                        routerLink={"/page/orgs/" + org.name}
+                        expand={"block"}
+                        color={"primary"}
+                        style={{
+                          marginTop: "20px",
+                        }}
+                      >
+                        Öffnen
+                      </IonButton>
+                      {org.owner !== userInfo.id && (
+                        <>
+                          <IonButton
+                            expand={"block"}
+                            color={"danger"}
+                            onClick={async () => {
+                              if (!confirm("Wirklich verlassen?")) return;
+
+                              const res = await REST.Orgs.removeOrgMember({
+                                token: localStorage.getItem("token") as string,
+                                name: org.name,
+                                userId: userInfo.id,
+                              });
+
+                              if (res.status !== 200) {
+                                alert(
+                                  "Organisation konnte nicht verlassen werden!",
+                                );
+                                return;
+                              }
+
+                              await reloadOrgs();
+                            }}
+                          >
+                            Verlassen
+                          </IonButton>
+                        </>
+                      )}
+
+                      {org.owner === userInfo.id && (
+                        <>
+                          <IonButton
+                            expand={"block"}
+                            color={"primary"}
+                            routerLink={"/page/orgs/" + org.name + "/settings"}
+                          >
+                            Einstellungen
+                          </IonButton>
+                          <IonButton
+                            expand={"block"}
+                            color={"danger"}
+                            onClick={async () => {
+                              if (
+                                !confirm(
+                                  "Wirklich löschen? Diese Aktion kann nicht mehr rückgängig gemacht werden!",
+                                )
+                              )
+                                return;
+
+                              const res = await REST.Orgs.deleteOrg({
+                                token: localStorage.getItem("token") as string,
+                                name: org.name,
+                              });
+
+                              if (res.status !== 200) {
+                                alert(
+                                  "Organisation konnte nicht gelöscht werden!",
+                                );
+                                return;
+                              }
+
+                              await reloadOrgs();
+                            }}
+                          >
+                            Löschen
+                          </IonButton>
+                        </>
+                      )}
                     </IonCardContent>
                   </IonCard>
                 </>
               );
             })}
+          <IonFab vertical="bottom" horizontal="end" slot="fixed">
+            <IonFabButton>
+              <IonIcon
+                ios={add}
+                md={addSharp}
+                onClick={async () => {
+                  const name = prompt("Name der Organisation");
+
+                  if (!name) return;
+
+                  const res = await REST.Orgs.createOrg({
+                    name: name,
+                    token: localStorage.getItem("token") as string,
+                  });
+
+                  if (res.status !== 200) {
+                    alert("Organisation konnte nicht erstellt werden!");
+                    return;
+                  }
+
+                  await reloadOrgs();
+                }}
+              />
+            </IonFabButton>
+          </IonFab>
         </IonContent>
       </IonPage>
     </>
